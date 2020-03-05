@@ -33,7 +33,18 @@ export default class Users extends Component {
 
   componentDidMount = () => {
     this.fetchData();
+   
   };
+
+  componentDidUpdate = () => {
+    const newUsersByMinute = new Date();
+    const returnedUsers = newUsersByMinute.getMinutes();
+    console.log(returnedUsers);
+    let url = `https://randomuser.me/api/?page=${returnedUsers}&results=10&seed=abc&nat=fr`;
+    Axios.get(url)
+      .then(response => this.setState({ data: response.data }))
+      .catch(error => console.error(error));
+  }
 
   loadMoreUsers = () => {
     let url = `https://randomuser.me/api/?page=1&results=10&nat=fr`;
