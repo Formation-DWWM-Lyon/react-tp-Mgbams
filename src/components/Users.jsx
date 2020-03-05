@@ -21,7 +21,8 @@ const ListItem = ({ name, url }) => {
 
 export default class Users extends Component {
   state = {
-    data: null
+    data: null,
+    counter: 1,
   };
 
   fetchData = () => {
@@ -39,17 +40,23 @@ export default class Users extends Component {
   componentDidUpdate = () => {
     const newUsersByMinute = new Date();
     const returnedUsers = newUsersByMinute.getMinutes();
-    console.log(returnedUsers);
+    //console.log(returnedUsers);
     let url = `https://randomuser.me/api/?page=${returnedUsers}&results=10&seed=abc&nat=fr`;
     Axios.get(url)
       .then(response => this.setState({ data: response.data }))
       .catch(error => console.error(error));
   }
 
-  loadMoreUsers = () => {
-    let url = `https://randomuser.me/api/?page=1&results=10&nat=fr`;
+  loadMoreUsers = (event) => {
+    event.preventDefault();
+      this.setState({
+        counter: this.state.counter + 1,
+      })
+      console.log(this.state.counter);
+      //let pagecount = Number(this.state.counter);
+    let url = `https://randomuser.me/api/?page=${this.state.counter}&results=10&nat=fr`;
     Axios.get(url)
-      .then(response => this.setState({ data: response.data }))
+      .then(response => this.setState({ data: response.data}))
       .catch(error => console.error(error));
   }
 
@@ -66,17 +73,18 @@ export default class Users extends Component {
           {data.results.map((item, index) => (
             <Card className="mb-3" key={index}>
               <Card.Header className="cardHeader"><b>Name</b>: {item.name.first} {item.name.last}</Card.Header>
+              <Card.Img style={{ height: '20rem' }} variant="top" src={item.picture.large} />
               <ListGroup variant="flush">
-                <ListGroup.Item>Gender: {item.gender}</ListGroup.Item>
+                <ListGroup.Item><i>Gender</i>: {item.gender}</ListGroup.Item>
                 <ListGroup.Item>
-                  Country: {item.location.city}, {item.location.country}
+                  <i>Country</i>: {item.location.city}, {item.location.country}
                 </ListGroup.Item>
-                <ListGroup.Item> Email: {item.email} </ListGroup.Item>
+                <ListGroup.Item > <i>Email</i>: <Card.Link href="#">{item.email}</Card.Link> </ListGroup.Item>
               </ListGroup>
             </Card>
           ))}
         </div>
-        <Button variant="info" className="mt-2" onClick={this.loadMoreUsers} >
+        <Button variant="info" className="mt-2" type="submit" onClick={this.loadMoreUsers} >
           More users..
         </Button>
       </div>
