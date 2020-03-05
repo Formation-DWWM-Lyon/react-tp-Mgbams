@@ -35,6 +35,13 @@ export default class Users extends Component {
     this.fetchData();
   };
 
+  loadMoreUsers = () => {
+    let url = `https://randomuser.me/api/?page=1&results=10&nat=fr`;
+    Axios.get(url)
+      .then(response => this.setState({ data: response.data }))
+      .catch(error => console.error(error));
+  }
+
   render = () => {
     const { data } = this.state;
     //if (data.results) {
@@ -58,7 +65,7 @@ export default class Users extends Component {
             </Card>
           ))}
         </div>
-        <Button variant="info" className="mt-2">
+        <Button variant="info" className="mt-2" onClick={this.loadMoreUsers} >
           More users..
         </Button>
       </div>
