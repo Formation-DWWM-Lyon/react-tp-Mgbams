@@ -1,11 +1,12 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+//import { Container } from 'react-bootstrap';
+import Users from './components/Users';
 
 function App() {
   return (
-    <Container>
-      Votre code ici!
-    </Container>
+    <div>
+      <Users />
+    </div>
   );
 }
 
